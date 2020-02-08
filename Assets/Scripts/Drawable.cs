@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Drawable : MonoBehaviour
 {
-    public int pencilSize = 10;
-    public int maxPencilSize = 30;
-    public Color color = Color.black;
+    public Brush brush;
 
 
 
@@ -27,30 +25,9 @@ public class Drawable : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
+        if (Input.GetMouseButtonDown(1))
         {
-            if (pencilSize < maxPencilSize)
-            {
-                ++pencilSize;
-            }
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
-        {
-            if (pencilSize > 1)
-            {
-                --pencilSize;
-            }
-        }
-
-        string key = Input.inputString;
-        switch (key)
-        {
-            case "0":   color = Color.white;    pencilSize = 30;    break;
-            case "1":   color = Color.black;    pencilSize = 10;    break;
-            case "2":   color = Color.red;      pencilSize = 10;    break;
-            case "3":   color = Color.green;    pencilSize = 10;    break;
-            case "4":   color = Color.blue;     pencilSize = 10;    break;
-            default: break;
+            ClearCanvas();
         }
     }
 
@@ -120,10 +97,7 @@ public class Drawable : MonoBehaviour
             previousX = -1;
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            ClearCanvas();
-        }
+        
 
 
 
@@ -145,18 +119,18 @@ public class Drawable : MonoBehaviour
 
     void DrawPoint(int x, int y)
     {
-        for (int i = y - pencilSize/2; i <= y + pencilSize/2; ++i)
+        for (int i = y - brush.size/2; i <= y + brush.size/2; ++i)
         {
             if (i >= 0 && i <= texture.height)
             {
-                for (int j = x - pencilSize/2; j <= x + pencilSize/2; ++j)
+                for (int j = x - brush.size/2; j <= x + brush.size/2; ++j)
                 {
                     if (j >= 0 && j <= texture.width)
                     {
-                        float distanceFromCenterPixel = (float) (Mathf.Abs(y - i) + Mathf.Abs(x - j)) / pencilSize;
+                        float distanceFromCenterPixel = (float) (Mathf.Abs(y - i) + Mathf.Abs(x - j)) / brush.size;
                         if (distanceFromCenterPixel < 0.75f)
                         {
-                            texture.SetPixel(j, i, color);
+                            texture.SetPixel(j, i, brush.color);
                         }
                     }
                 }
